@@ -141,3 +141,25 @@ export const references = [
   { id: 'wisniewski', kind: 'Scholarly publication', text: 'Wisniewski, B., Zierer, K., & Hattie, J. (2020). The power of feedback revisited: A meta-analysis of educational feedback research. Frontiers in Psychology, 10, Article 3087.', doi: 'https://doi.org/10.3389/fpsyg.2019.03087' },
   { id: 'yesmukhametov', kind: 'Course reflection', text: 'Yesmukhametov, R. (2026). [Reflective note on grading and administrative expectations]. Astana IT University.', doi: '' },
 ];
+
+// Links between the essay and the Higher Education Pedagogy course readings (Weeks 6–10).
+export const courseLinks = [
+  { week: 'Week 6', source: 'Course slides: constructive alignment and feedback', essay: 'Competence · Transparent criteria',
+    title: 'One verb in all three corners.', text: 'The outcome, the activity, and the assessment should call for the same verb. If the outcome says “analyse” but the test asks students to recall, the verb is never practised or assessed. Rubrics should describe levels in words and be shared before the task: feed up, feed back, feed forward.',
+    link: 'Our activity rates clarity, evidence, and alternative perspectives because the task asks students to argue, not to recall.' },
+  { week: 'Week 6', source: 'Magnússon & Rytzler, Pedagogy and Didaktik of Higher Education, Ch. 6', essay: 'Individual circumstances',
+    title: 'Dilemmas to live with, not solve.', text: '“Grade fairly vs. give honest, developmental feedback” is named as a lasting tension of teaching. Judging it well calls for phronēsis, practical wisdom, rather than a guaranteed method. Teachers are asked to make power visible by being transparent about assessment and its limits.',
+    link: 'This is why we propose reasoned, explained accommodations instead of a fixed rule, and why the poster states its own limitations.' },
+  { week: 'Weeks 6 & 9', source: 'Course slides; Joordens (2025), AI and the Paradigm Shift in Education', essay: 'Creativity and AI',
+    title: 'A high grade no longer guarantees deep learning.', text: 'Generative AI can produce polished work without engagement, and detection tools are unreliable, so policing is not a strategy. The course suggests assessing the process, adding a live component such as an oral defence, designing authentic tasks, and setting clear AI rules.',
+    link: 'The essay proposes asking students to explain decisions and discuss revisions; our own viva voce defence follows the same logic.' },
+  { week: 'Week 7', source: 'Grabinger & Dunlap (1995), Rich Environments for Active Learning', essay: 'Feedback · Recommendations',
+    title: 'Make thinking visible.', text: 'Rich environments for active learning rely on generative tasks, authentic contexts, and authentic assessment with criteria known in advance. Student-centred lessons end with a debrief where teams share products, give peer feedback, and reflect.',
+    link: 'This supports our draft–comment–revise cycle and peer discussion with clear expectations rather than unguided peer marking.' },
+  { week: 'Week 8', source: 'Magnússon & Rytzler, Ch. 8: Rethinking the Paradoxes of Teacher Education with Didaktik', essay: 'Creativity · Bildung',
+    title: 'A student is more than a score.', text: 'Didaktik treats teaching as a triadic relation between a student, a teacher, and specific content. The Week 6 discussion warns that standardised outcomes and rubrics can “fix who the student should become”.',
+    link: 'Sagatove’s reflection on Bildung led us to describe a performance at a stage of learning, not a fixed judgment of a person’s worth.' },
+  { week: 'Weeks 9–10', source: 'Shon (2017), Abay’s Legacy; Sarmurzin (2024), Enhancing Teacher Status in Kazakhstan', essay: 'Grades and motivation',
+    title: 'The Kazakhstani context.', text: 'Abay placed the learner’s attitude and the aim of becoming a “complete person” at the centre of education. Sarmurzin finds a gap between teacher-status policy and practice, with school leaders shaping how teachers experience their work.',
+    link: 'Reported grade ceilings after administrative intervention show how assessment decisions are shaped by institutions, not only by teachers.' },
+];

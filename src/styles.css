@@ -30,3 +30,17 @@
 }
 
 .team-role{display:block;margin-top:2px;font-size:9px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:#85977c}
+
+.course-section{padding-top:70px;padding-bottom:40px}
+.course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+.course-card{display:flex;flex-direction:column;gap:12px;padding:24px;background:#fbfaf5;border:1px solid var(--line);border-radius:4px}
+.course-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.course-week{font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#fff;background:#1d6b5d;padding:3px 8px;border-radius:2px}
+.course-essay{font-size:10px;letter-spacing:.6px;color:#85977c}
+.course-card h3{font-size:19px;line-height:1.25;letter-spacing:-.3px;font-weight:550}
+.course-card p{font-size:13px;line-height:1.65;color:#5d6f58}
+.course-card .course-link{padding:12px 14px;background:#edf1e5;border-left:2px solid #c9a24a;color:#3f5139}
+.course-source{margin-top:auto;font-size:11px;font-style:italic;color:#85977c}
+.course-note{margin-top:22px}
+@media(max-width:900px){.course-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.course-grid{grid-template-columns:1fr}.course-section{padding-top:44px}}
