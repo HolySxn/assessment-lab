@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { accounts, activity, content, peerFeedback, ratingLabels, recommendations, references, rubric, team, teamPlaceholder, themes, trial } from './data';
+import { accounts, activity, samples, content, peerFeedback, ratingLabels, recommendations, references, rubric, team, teamPlaceholder, themes, trial } from './data';
 import { freshActivity, readActivity, weightedGrade } from './scoring';
 import type { ActivityState, Ratings } from './scoring';
 
@@ -31,6 +31,10 @@ function GradeIllustration() {
 function Assessor() {
   const [state, setState] = useState<ActivityState>(() => { try { return readActivity(sessionStorage.getItem('assessment-lab:activity:v1')); } catch { return freshActivity(); } });
   const [storageAvailable, setStorageAvailable] = useState(true);
+  const pickSample = (avoid = -1) => { let i = Math.floor(Math.random() * samples.length); if (samples.length > 1 && i === avoid) i = (i + 1) % samples.length; return i; };
+  const [sampleIndex, setSampleIndex] = useState<number>(() => { try { const v = Number(sessionStorage.getItem('assessment-lab:sample:v1')); if (Number.isInteger(v) && v >= 1 && v <= samples.length) return v - 1; } catch { /* storage blocked */ } return pickSample(); });
+  useEffect(() => { try { sessionStorage.setItem('assessment-lab:sample:v1', String(sampleIndex + 1)); } catch { /* storage blocked */ } }, [sampleIndex]);
+  const sample = samples[sampleIndex];
   const panel = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
   useEffect(() => { try { sessionStorage.setItem('assessment-lab:activity:v1', JSON.stringify(state)); } catch { setStorageAvailable(false); } }, [state]);
@@ -40,12 +44,12 @@ function Assessor() {
   const difference = score === null ? 0 : Math.round((score - state.initial) * 10) / 10;
   const rate = (index: number, value: number) => { const next = [...state.ratings] as Ratings; next[index] = value; update({ ratings: next }); };
   return <section id="activity" className="activity-section section-wrap">
-    <div className="section-heading"><div><SectionLabel number="01">THE INTERACTIVE EXPERIMENT</SectionLabel><h2>You are the assessor.</h2></div><p>One response. Two ways of looking.<br />What will shape your decision?</p></div>
+    <div className="section-heading"><div><SectionLabel number="01">THE INTERACTIVE EXPERIMENT</SectionLabel><h2>You are the assessor.</h2></div><p>A random student response. Two ways of looking.<br />What will shape your decision?</p></div>
     <div className="activity-shell">
-      <div className="activity-toolbar"><span className="tag"><span className="live-dot" />FICTIONAL CLASSROOM EXAMPLE</span><button className="text-button" onClick={() => setState(freshActivity())}><Icon name="reset" size={15} />Reset activity</button></div>
+      <div className="activity-toolbar"><span className="tag"><span className="live-dot" />FICTIONAL CLASSROOM EXAMPLE</span><button className="text-button" onClick={() => { setState(freshActivity()); setSampleIndex(pickSample(sampleIndex)); }}><Icon name="reset" size={15} />New response</button></div>
       <ol className="steps" aria-label="Activity progress">{['First impression', 'Look closer', 'Compare & reflect'].map((label, i) => <li key={label} className={state.step === i + 1 ? 'current' : state.step > i + 1 ? 'complete' : ''} aria-current={state.step === i + 1 ? 'step' : undefined}><span>{state.step > i + 1 ? <Icon name="check" size={15} /> : `0${i + 1}`}</span>{label}</li>)}</ol>
       <div className="experiment-body">
-        <div className="student-work"><p className="eyebrow">THE TASK</p><h3>{activity.task}</h3><div className="response-sheet"><span className="eyebrow">SAMPLE STUDENT RESPONSE</span><span className="quote-mark" aria-hidden="true">“</span><blockquote>{activity.response}</blockquote><div className="sheet-footer"><span>Read the reasoning.<br />Then make your judgment.</span><span className="handdrawn" aria-hidden="true">↗</span></div></div><p className="small-note">This response is fictional. It is not an interview quotation or a research finding.</p></div>
+        <div className="student-work"><p className="eyebrow">THE TASK</p><h3>{activity.task}</h3><div className="response-sheet"><span className="eyebrow">SAMPLE STUDENT RESPONSE · {sampleIndex + 1} OF {samples.length}</span><span className="quote-mark" aria-hidden="true">“</span><blockquote>{sample.response}</blockquote><div className="sheet-footer"><span>Read the reasoning.<br />Then make your judgment.</span><span className="handdrawn" aria-hidden="true">↗</span></div></div><p className="small-note">This response is fictional. It is not an interview quotation or a research finding.</p></div>
         <div className="assessor-panel" key={state.step}>
           {state.step === 1 && <>
             <p className="eyebrow">YOUR FIRST IMPRESSION</p><h3 ref={panel} tabIndex={-1}>What grade would you give?</h3><p>Choose an overall grade before seeing the rubric. Use your own judgment.</p>
@@ -56,7 +60,7 @@ function Assessor() {
           </>}
           {state.step === 2 && <>
             <div className="panel-kicker"><p className="eyebrow">NOW MAKE THE CRITERIA EXPLICIT</p><span>Initial: <b>{state.initial}/100</b></span></div><h3 ref={panel} tabIndex={-1}>Reassess the same response.</h3><p className="small-note">Demonstration rubric created for this website. Select 0–4 for each criterion; no ratings are preselected.</p>
-            <details className="feedback-box" open><summary>Constructive feedback <Icon name="plus" size={17} /></summary><div className="feedback-content">{activity.feedback.map(item => <p key={item.title}><strong>{item.title}.</strong> {item.text}</p>)}</div></details>
+            <details className="feedback-box" open><summary>Constructive feedback <Icon name="plus" size={17} /></summary><div className="feedback-content">{sample.feedback.map(item => <p key={item.title}><strong>{item.title}.</strong> {item.text}</p>)}</div></details>
             <div className="rubric-fields">{rubric.map((criterion, index) => <fieldset key={criterion.id}><legend>{criterion.title}<span>{criterion.weight}%</span></legend><div className="rating-options">{ratingLabels.map((label, value) => <label key={value} className={state.ratings[index] === value ? 'selected' : ''}><input type="radio" name={criterion.id} value={value} checked={state.ratings[index] === value} onChange={() => rate(index, value)} aria-describedby={`${criterion.id}-descriptor`} /><b>{value}</b><span>{label}</span></label>)}</div><p id={`${criterion.id}-descriptor`} className="descriptor" aria-live="polite">{state.ratings[index] === null ? 'Choose a rating to see its descriptor.' : criterion.descriptors[state.ratings[index]!]}</p><details className="descriptor-details"><summary>View all descriptors</summary><ol start={0}>{criterion.descriptors.map((d, i) => <li key={d}><strong>{ratingLabels[i]}:</strong> {d}</li>)}</ol></details></fieldset>)}</div>
             <p className="calculation-note">Weighted grade = (clarity ÷ 4 × 30) + (evidence ÷ 4 × 40) + (alternatives ÷ 4 × 30).</p>
             <button className="button primary full" disabled={score === null} onClick={() => update({ step: 3 })}>Compare my decisions<Icon name="arrow" /></button>{score === null && <p className="privacy-note" role="status">Rate all three criteria to continue.</p>}
@@ -110,7 +114,7 @@ export default function App() {
   return <>
     <a className="skip-link" href="#main">Skip to content</a>
     <div className="screen-site">
-      <header className="site-header"><a href="#overview" className="wordmark" aria-label="Assessment Lab home"><span className="brand-icon"><Icon name="flask" size={22} /></span>assessment<span>lab</span><span className="brand-dot">.</span></a><nav aria-label="Poster navigation">{nav.map(([id, label]) => <a key={id} href={`#${id}`} className={active === id ? 'active' : ''} aria-current={active === id ? 'location' : undefined}>{label}</a>)}</nav><button className="print-button" onClick={() => window.print()}><Icon name="print" size={17} /><span>Print poster</span></button></header>
+      <header className="site-header"><a href="#overview" className="wordmark" aria-label="Assessment Lab home"><span className="brand-icon"><Icon name="flask" size={22} /></span>assessment<span>lab</span><span className="brand-dot">.</span></a><nav aria-label="Poster navigation">{nav.map(([id, label]) => <a key={id} href={`#${id}`} className={active === id ? 'active' : ''} aria-current={active === id ? 'location' : undefined}>{label}</a>)}</nav><a className="print-button" href="./assessment-lab-poster.pdf" download="Assessment-Lab-poster.pdf"><Icon name="print" size={17} /><span>Download poster</span></a></header>
       <main id="main">
         <section id="overview" className="hero section-wrap">
           <div className="hero-copy"><div className="eyebrow hero-eyebrow"><span className="live-dot" />AN INTERACTIVE ACADEMIC POSTER</div><h1>What does a grade<br />actually <em>tell us?</em></h1><p className="hero-intro">{content.introduction}</p><div className="hero-actions"><a className="button primary" href="#activity">Step into the assessor’s shoes<Icon name="arrow" size={19} /></a><a className="quiet-link" href="#evidence">Explore the evidence<span>↗</span></a></div><div className="hero-meta"><span>ASTANA IT UNIVERSITY</span><span>MT-2601M</span><span>ASSESSMENT & LEARNING</span></div></div><GradeIllustration />

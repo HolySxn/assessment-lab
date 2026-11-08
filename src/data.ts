@@ -42,7 +42,7 @@ export const themes = [
     boundary: 'A rubric’s presence does not establish that every decision is fair.',
   },
   {
-    id: 'circumstances', number: '05', title: 'Keep standards. Explain flexibility.', label: 'Individual circumstances', kind: 'Personal accounts → proposal', citation: 'P1–P3; Shpringer, 2026; Sagatove, n.d.', ref: 'shpringer',
+    id: 'circumstances', number: '05', title: 'Keep standards. Explain flexibility.', label: 'Individual circumstances', kind: 'Personal accounts → proposal', citation: 'P1–P3; Shpringer, 2026; Sagatove, 2026', ref: 'shpringer',
     summary: 'All three interviewees support considering serious circumstances. We propose reasoned accommodations while keeping the learning outcome clear.',
     detail: 'P2 separates common knowledge requirements from flexibility in demonstrating them. We propose explaining a changed deadline after illness, recording the reason without disclosing another student’s private details, and allowing written questions about assessment decisions.',
     boundary: 'The cited meta-analyses do not directly test the fairness of these accommodations.',
@@ -64,15 +64,49 @@ export const recommendations = [
 
 export const trial = 'Evaluate a classroom trial using initial and revised work against the same criteria, alongside students’ experiences of barriers. Improvement would be local evidence; practice and extra study could also explain it, so a simple before-and-after comparison would not establish causation.';
 
+export const samples = [
+  {
+    response: 'Universities should remove grades because students only study for points. Practical projects show skills better than exams. Teachers should give comments instead, because comments help students improve.',
+    feedback: [
+      { title: 'A clear position', text: 'You take an identifiable position and offer reasons for it. Keep that direct opening.', tone: 'strength' },
+      { title: 'Qualify the generalisations', text: '“Students only study for points” and “projects show skills better” are broad claims. Explain when they might hold and where they might not.', tone: 'develop' },
+      { title: 'Bring evidence into the argument', text: 'Use a relevant source or concrete example, explain how it supports your claim, and acknowledge the limits of applying school research to universities.', tone: 'develop' },
+      { title: 'Consider another perspective', text: 'Address a reason for retaining grades, such as communicating achievement, then explain whether grades and useful comments could work together.', tone: 'develop' },
+    ],
+  },
+  {
+    response: 'Universities should keep grades but add written feedback. A grade lets employers and scholarship committees compare achievement, but a number alone does not tell a student what to improve. Koenka et al. (2021) found that comments supported motivation better than grades, although their studies were in schools, so the effect at university may differ. A combined approach could keep accountability while making the next step clear.',
+    feedback: [
+      { title: 'A qualified position', text: 'You avoid an all-or-nothing answer and explain why both grades and comments have a role. This is a strong basis for the argument.', tone: 'strength' },
+      { title: 'Evidence with its limits', text: 'You cite a relevant meta-analysis and note that it concerns schools. Keep naming the boundaries of the evidence you use.', tone: 'strength' },
+      { title: 'Show how it would work', text: 'Explain what a combined approach looks like in practice, for example comments on a draft followed by a graded revision.', tone: 'develop' },
+      { title: 'Weigh the strongest objection', text: 'Consider the workload of writing useful comments for large classes and explain how a teacher could manage it.', tone: 'develop' },
+    ],
+  },
+  {
+    response: 'Grades are unfair. Last semester my teacher said nobody could get above 95, so why should anyone try? If teachers wrote comments instead, students would finally know what they did wrong. I think everyone in my group agrees with this.',
+    feedback: [
+      { title: 'A concrete experience', text: 'Your example of a grade ceiling makes the problem specific and shows why students may see assessment as predetermined.', tone: 'strength' },
+      { title: 'From one case to a general claim', text: 'One course does not show that all grades are unfair. Explain whether the problem lies in grades themselves or in how this decision was made and explained.', tone: 'develop' },
+      { title: 'Agreement is not evidence', text: '“Everyone in my group agrees” shows an opinion is shared, not that it is correct. Add a source or reasoning that others could check.', tone: 'develop' },
+      { title: 'Consider a smaller fix', text: 'Would transparent criteria and an explanation of how to reach a higher mark solve the problem without removing grades? Address this alternative.', tone: 'develop' },
+    ],
+  },
+  {
+    response: 'Numerical grades should stay. Without them, students would stop working, because comments are easy to ignore. Grades are objective and the same for everyone, so they are fairer than comments, which depend on the teacher’s mood.',
+    feedback: [
+      { title: 'A clear counter-position', text: 'You take a definite position and give reasons, including a concern about consistency that many students share.', tone: 'strength' },
+      { title: 'Test the word “objective”', text: 'A grade also depends on a teacher’s judgment. Explain what would make that judgment consistent, for example shared criteria or a rubric.', tone: 'develop' },
+      { title: 'Support the prediction', text: '“Students would stop working” is a prediction. Use evidence on grades, comments, and motivation, and note what it can and cannot show.', tone: 'develop' },
+      { title: 'Consider combining both', text: 'Address the view that grades and comments can work together, and explain whether that would answer your concern about fairness.', tone: 'develop' },
+    ],
+  },
+];
+
 export const activity = {
   task: 'Should universities replace numerical grades with written feedback? Give a reasoned answer, use evidence, and consider another perspective.',
-  response: 'Universities should remove grades because students only study for points. Practical projects show skills better than exams. Teachers should give comments instead, because comments help students improve.',
-  feedback: [
-    { title: 'A clear position', text: 'You take an identifiable position and offer reasons for it. Keep that direct opening.', tone: 'strength' },
-    { title: 'Qualify the generalisations', text: '“Students only study for points” and “projects show skills better” are broad claims. Explain when they might hold and where they might not.', tone: 'develop' },
-    { title: 'Bring evidence into the argument', text: 'Use a relevant source or concrete example, explain how it supports your claim, and acknowledge the limits of applying school research to universities.', tone: 'develop' },
-    { title: 'Consider another perspective', text: 'Address a reason for retaining grades, such as communicating achievement, then explain whether grades and useful comments could work together.', tone: 'develop' },
-  ],
+  response: samples[0].response,
+  feedback: samples[0].feedback,
   explanation: 'This fictional classroom example and illustrative rubric were created for the website. Visitors give an initial grade, read criteria and feedback, rate three criteria from 0 to 4, and compare their decisions. There is no predetermined correct grade. A changed grade does not prove improved fairness or learning; criteria make the reasoning behind a decision more explicit.',
 };
 
@@ -98,12 +132,12 @@ export const peerFeedback = { changes: '', placeholder: 'Awaiting the team’s a
 export const references = [
   { id: 'biggs', kind: 'Scholarly publication', text: 'Biggs, J. (1996). Enhancing teaching through constructive alignment. Higher Education, 32(3), 347–364.', doi: 'https://doi.org/10.1007/BF00138871' },
   { id: 'double', kind: 'Scholarly publication', text: 'Double, K. S., McGrane, J. A., & Hopfenbeck, T. N. (2020). The impact of peer assessment on academic performance: A meta-analysis of control group studies. Educational Psychology Review, 32(2), 481–509.', doi: 'https://doi.org/10.1007/s10648-019-09510-3' },
-  { id: 'kamaliden', kind: 'Course reflection', text: 'Kamaliden, A. (n.d.). Reflective note [Unpublished course reflection]. Astana IT University.', doi: '' },
+  { id: 'kamaliden', kind: 'Course reflection', text: 'Kamaliden, A. (2026). Reflective note [Unpublished course reflection]. Astana IT University.', doi: '' },
   { id: 'koenka', kind: 'Scholarly publication', text: 'Koenka, A. C., Linnenbrink-Garcia, L., Moshontz, H., Atkinson, K. M., Sanchez, C. E., & Cooper, H. (2021). A meta-analysis on the impact of grades and comments on academic motivation and achievement: A case for written feedback. Educational Psychology, 41(7), 922–947.', doi: 'https://doi.org/10.1080/01443410.2019.1659939' },
   { id: 'panadero', kind: 'Scholarly publication', text: 'Panadero, E., Jonsson, A., Pinedo, L., & Fernández-Castilla, B. (2023). Effects of rubrics on academic performance, self-regulated learning, and self-efficacy: A meta-analytic review. Educational Psychology Review, 35(4), Article 113.', doi: 'https://doi.org/10.1007/s10648-023-09823-4' },
-  { id: 'sagatove', kind: 'Course reflection', text: 'Sagatove, M. (n.d.). Reflective notes [Unpublished course reflection]. Astana IT University.', doi: '' },
-  { id: 'saparbek', kind: 'Course reflection', text: 'Saparbek, M. (n.d.). Week 6 reflective notes [Unpublished course reflection]. Astana IT University.', doi: '' },
+  { id: 'sagatove', kind: 'Course reflection', text: 'Sagatove, M. (2026). Reflective notes [Unpublished course reflection]. Astana IT University.', doi: '' },
+  { id: 'saparbek', kind: 'Course reflection', text: 'Saparbek, M. (2026). Week 6 reflective notes [Unpublished course reflection]. Astana IT University.', doi: '' },
   { id: 'shpringer', kind: 'Course reflection', text: 'Shpringer, A. (2026). Teaching dilemmas and trust in learning [Unpublished course reflection]. Astana IT University.', doi: '' },
   { id: 'wisniewski', kind: 'Scholarly publication', text: 'Wisniewski, B., Zierer, K., & Hattie, J. (2020). The power of feedback revisited: A meta-analysis of educational feedback research. Frontiers in Psychology, 10, Article 3087.', doi: 'https://doi.org/10.3389/fpsyg.2019.03087' },
-  { id: 'yesmukhametov', kind: 'Course reflection', text: 'Yesmukhametov, R. (n.d.). [Reflective note on grading and administrative expectations]. Astana IT University.', doi: '' },
+  { id: 'yesmukhametov', kind: 'Course reflection', text: 'Yesmukhametov, R. (2026). [Reflective note on grading and administrative expectations]. Astana IT University.', doi: '' },
 ];
