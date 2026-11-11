@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { accounts, activity, samples, courseLinks, content, peerFeedback, ratingLabels, recommendations, references, rubric, team, teamPlaceholder, themes, trial } from './data';
+import { accounts, activity, samples, courseLinks, game, content, peerFeedback, ratingLabels, recommendations, references, rubric, team, teamPlaceholder, themes, trial } from './data';
 import { freshActivity, readActivity, weightedGrade } from './scoring';
 import type { ActivityState, Ratings } from './scoring';
 
@@ -83,6 +83,37 @@ function Assessor() {
 type TeamInfo = { contributions: string[]; changes: string };
 const defaultTeam = (): TeamInfo => ({ contributions: team.map(t => t.contribution), changes: peerFeedback.changes });
 
+
+function GameSection() {
+  const [open, setOpen] = useState(false);
+  const frameRef = useRef<HTMLIFrameElement>(null);
+  const openerRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+    document.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow; document.body.style.overflow = 'hidden';
+    frameRef.current?.focus();
+    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = prev; openerRef.current?.focus(); };
+  }, [open]);
+  return <section id="play" className="game-section"><div className="section-wrap">
+    <div className="section-heading"><div><SectionLabel number="07">NOW IT’S YOUR TURN</SectionLabel><h2>Run the semester <em>yourself.</em></h2></div><p className="game-tagline">{game.tagline}</p></div>
+    <div className="game-layout">
+      <button ref={openerRef} className="game-preview" onClick={() => setOpen(true)} aria-label={`Play ${game.title} on this page`}><img src="./game-preview.png" alt={`${game.title} title screen: a lecture hall drawn in pixel art`} loading="lazy" /><span className="game-play-badge"><Icon name="arrow" size={18} />Play</span></button>
+      <div className="game-info">
+        <span className="eyebrow">THE COMPANION GAME</span><h3>{game.title}</h3><p>{game.intro}</p>
+        <ol className="game-chapters">{game.chapters.map(c => <li key={c.week}><b>{c.week}</b><span>{c.title}</span></li>)}</ol>
+        <ul className="game-facts">{game.facts.map(f => <li key={f}>{f}</li>)}</ul>
+        <div className="game-actions"><button className="button game-primary" onClick={() => setOpen(true)}>Play on this page<Icon name="arrow" /></button><a className="text-button game-newtab" href={game.url} target="_blank" rel="noreferrer">Open in a new tab<Icon name="external" size={15} /><span className="sr-only"> (opens in a new tab)</span></a></div>
+      </div>
+    </div>
+    {open && <div className="game-modal" role="dialog" aria-modal="true" aria-label={game.title} onClick={e => { if (e.target === e.currentTarget) setOpen(false); }}>
+      <div className="game-frame-wrap"><div className="game-modal-bar"><span>{game.title}</span><a href={game.url} target="_blank" rel="noreferrer">New tab<Icon name="external" size={14} /></a><button onClick={() => setOpen(false)} aria-label="Close the game">✕ Close</button></div>
+        <iframe ref={frameRef} onLoad={e => e.currentTarget.focus()} src={game.url} title={`${game.title} — playable game`} allow="autoplay; fullscreen" allowFullScreen /></div>
+    </div>}
+  </div></section>;
+}
+
 function PrintPoster({ info }: { info: TeamInfo }) {
   return <article className="print-poster" aria-label="A3 academic poster">
     <header className="print-header"><div><p>{content.institution}</p><h1>{content.title}</h1><h2>{content.subtitle}</h2></div><div className="print-argument"><strong>{content.argument}</strong><p>{content.conclusion}</p></div></header>
@@ -98,14 +129,14 @@ function PrintPoster({ info }: { info: TeamInfo }) {
       <h2>References</h2><div className="print-references">{references.map(r => <p key={r.id}>{r.text}{r.doi && <> <a href={r.doi}>{r.doi}</a></>}</p>)}</div>
       <h2>Poster contributions</h2>{team.map((member, i) => <p className="print-contribution" key={member.name}><strong>{member.name}:</strong> {info.contributions[i].trim() || teamPlaceholder}</p>)}
       {info.changes.trim() && <><h2>Changes after peer feedback</h2><p className="preserve-lines">{info.changes}</p></>}
-    </div></div><footer className="print-footer"><span>Based on: {content.essayTitle}</span><span>{content.checkedBy}</span></footer>
+    </div></div><footer className="print-footer"><span>Based on: {content.essayTitle} · Play the companion game: {game.url}</span><span>{content.checkedBy}</span></footer>
   </article>;
 }
 
 export default function App() {
   const [active, setActive] = useState('overview');
   const info = defaultTeam();
-  const nav = [['overview', 'Overview'], ['activity', 'The activity'], ['evidence', 'Evidence'], ['recommendations', 'Recommendations'], ['course', 'Course links'], ['references', 'References'], ['team', 'The team']];
+  const nav = [['overview', 'Overview'], ['activity', 'The activity'], ['evidence', 'Evidence'], ['recommendations', 'Recommendations'], ['course', 'Course links'], ['references', 'References'], ['team', 'The team'], ['play', 'Play the game']];
   useEffect(() => {
     const observer = new IntersectionObserver(entries => { for (const e of entries) if (e.isIntersecting) setActive(e.target.id); }, { rootMargin: '-100px 0px -60% 0px', threshold: 0 });
     nav.forEach(([id]) => { const el = document.getElementById(id); if (el) observer.observe(el); });
@@ -136,6 +167,7 @@ export default function App() {
           <div className="team-list">{team.map((m, i) => <article key={m.name}><span>0{i + 1}</span><div><h3>{m.name}</h3><span className="team-role">{team[i].role}</span></div><p className="preserve-lines">{info.contributions[i].trim() || teamPlaceholder}</p></article>)}</div>
           {info.changes.trim() && <div className="peer-feedback"><div><span className="eyebrow">A POSTER IS A WORK IN PROGRESS</span><h3>Changes after peer feedback</h3></div><p className="preserve-lines">{info.changes}</p></div>}
         </section>
+        <GameSection />
       </main><footer className="site-footer"><div className="section-wrap"><a className="wordmark" href="#overview"><Icon name="flask" />assessment<span>lab.</span></a><p>A grade is a starting point.<br /><span>Make the reasoning visible.</span></p><a href="#overview">Back to the top ↑</a></div></footer>
     </div><PrintPoster info={info} />
   </>;

@@ -163,3 +163,18 @@ export const courseLinks = [
     title: 'The Kazakhstani context.', text: 'Abay placed the learner’s attitude and the aim of becoming a “complete person” at the centre of education. Sarmurzin finds a gap between teacher-status policy and practice, with school leaders shaping how teachers experience their work.',
     link: 'Reported grade ceilings after administrative intervention show how assessment decisions are shaped by institutions, not only by teachers.' },
 ];
+
+// Companion game built from the essay.
+export const game = {
+  title: 'Grade Expectations',
+  url: 'https://holysxn.github.io/grade-expectations/',
+  tagline: 'A semester of fair assessment. Every call costs something.',
+  intro: 'A short pixel-art visual novel built from this essay. You are the lecturer for one semester. Every decision shifts your students’ knowledge, motivation, and trust, and after each one a card shows what the research says.',
+  chapters: [
+    { week: 'Week 3', title: 'The dean asks you to cap grades at 95.' },
+    { week: 'Week 6', title: 'One student wrote the whole group report.' },
+    { week: 'Week 9', title: 'A sick student asks to move the deadline.' },
+    { week: 'Week 11', title: 'An essay that might be written by AI.' },
+  ],
+  facts: ['About 10–12 minutes', 'Five possible endings', 'Sound on · mouse or keyboard'],
+};
